@@ -25,6 +25,7 @@ The model is trained using datasets from various sources, including:
 - Kaggle Plant Classification Datasets
 - iNaturalist
 - PlantCLEF
+- GBIF
 
 These datasets contain a wide variety of images of flowers and plants, which help improve the accuracy of the classification model.
 
@@ -68,9 +69,6 @@ To get a local copy up and running, follow these steps:
 2. The application will process the image and classify it using the MobileNetV3 model.
 3. The classification results, including the predicted label and description, will be displayed on the screen.
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a pull request or open an issue for any suggestions or improvements.
 
 ## License
 

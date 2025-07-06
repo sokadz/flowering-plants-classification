@@ -5,3 +5,9 @@ dist
 # ...existing code...
 
 package-lock.json
+
+# Build output
+build/
+
+# TensorFlow.js model files 
+public/mobilenetv3_flowers_tfjs/
