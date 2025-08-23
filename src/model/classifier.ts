@@ -1,15 +1,15 @@
+import '@tensorflow/tfjs-backend-webgl';
+import '@tensorflow/tfjs-backend-cpu';
 import * as tf from '@tensorflow/tfjs';
 
-let model: tf.LayersModel | tf.GraphModel | null = null;
+let model: tf.LayersModel | null = null;
 
-export async function loadModel() {
-    if (!model) {
-        // model = await tf.loadGraphModel('/mobilenetv3_flowers_tfjs/model.json');
-        model = await tf.loadLayersModel('/mobilenetv3_flowers_tfjs/model.json');
-    }
-}
-
-export async function classifyImage(file: File): Promise<{ label: number }> {
+// Update return type untuk include confidence
+export async function classifyImage(file: File): Promise<{
+    label: number;
+    confidence: number;
+    topPredictions?: Array<{ label: number; confidence: number; name: string }>;
+}> {
     await loadModel();
 
     return new Promise((resolve, reject) => {
@@ -19,23 +19,59 @@ export async function classifyImage(file: File): Promise<{ label: number }> {
         img.onload = async () => {
             try {
                 if (!model) return reject('Model not loaded');
+
                 const tensor = tf.browser.fromPixels(img)
                     .resizeNearestNeighbor([224, 224])
                     .toFloat()
                     .div(255.0)
                     .expandDims(0);
-                const prediction = model.predict(tensor);
-                // Handle case where prediction is an array of tensors, common for some models.
-                const outputTensor = Array.isArray(prediction) ? prediction[0] : prediction;
-                const data = await (outputTensor as tf.Tensor).data();
+
+                const prediction = model.predict(tensor) as tf.Tensor;
+                const data = await prediction.data();
                 const arr = Array.from(data);
-                const max = arr.reduce((a, b) => Math.max(a, b), -Infinity);
-                const classIdx = arr.indexOf(max);
-                resolve({ label: classIdx });
+
+                // Get top prediction
+                const maxConfidence = Math.max(...arr);
+                const maxIndex = arr.indexOf(maxConfidence);
+
+                // Get top 3 predictions 
+                const indexed = arr.map((confidence, index) => ({ index, confidence }))
+                    .sort((a, b) => b.confidence - a.confidence)
+                    .slice(0, 3);
+
+                // Clean up tensors
+                tensor.dispose();
+                prediction.dispose();
+
+                resolve({
+                    label: maxIndex,
+                    confidence: maxConfidence,
+                    topPredictions: indexed.map(item => ({
+                        label: item.index,
+                        confidence: item.confidence,
+                        name: `Class ${item.index + 1}`
+                    }))
+                });
             } catch (err) {
+                console.error('Classification error:', err);
                 reject(err);
             }
         };
         img.onerror = reject;
     });
+}
+
+export async function loadModel() {
+    if (!model) {
+        try {
+            await tf.ready();
+            console.log('TensorFlow.js backend:', tf.getBackend());
+            console.log('Loading MobileNetV2 flower model...');
+            model = await tf.loadLayersModel('/flower_model_tfjs/model.json');
+            console.log('✅ Model loaded successfully');
+        } catch (error) {
+            console.error('❌ Error loading model:', error);
+            throw error;
+        }
+    }
 }

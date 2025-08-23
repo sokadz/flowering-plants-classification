@@ -10,4 +10,8 @@ package-lock.json
 build/
 
 # TensorFlow.js model files 
-public/mobilenetv3_flowers_tfjs/
+/public/flower_model_tfjs/
+*.h5
+*.pb
+*.tflite
+*.onnx

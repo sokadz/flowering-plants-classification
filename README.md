@@ -1,11 +1,11 @@
-# Ornamental Plant Classifier
+# 🌱 Ornamental Plants & Flowers Classifier 🌸
 
-This project is a web application for classifying ornamental plants and flowers using image classification techniques. It utilizes React, TypeScript, and TensorFlow.js with the MobileNetV3 model to identify various species of plants based on uploaded images.
+This project is a web application for classifying ornamental plants and flowers using image classification techniques. It utilizes React, TypeScript, and TensorFlow.js with the MobileNetV2 model to identify various species of plants based on uploaded images.
 
 ## Features
 
 - Upload images of ornamental plants and flowers.
-- Classify images using a pre-trained MobileNetV3 model.
+- Classify images using a pre-trained MobileNetV2 model.
 - Display classification results including the predicted label and description.
 - User-friendly interface built with Mantine.
 
@@ -14,7 +14,7 @@ This project is a web application for classifying ornamental plants and flowers 
 - React
 - TypeScript
 - TensorFlow.js
-- MobileNetV3
+- MobileNetV2
 - Mantine
 
 ## Dataset
@@ -66,8 +66,8 @@ To get a local copy up and running, follow these steps:
 ## Usage
 
 1. Upload an image of an ornamental plant or flower using the upload button.
-2. The application will process the image and classify it using the MobileNetV3 model.
-3. The classification results, including the predicted label and description, will be displayed on the screen.
+2. The application will process the image and classify it using the MobileNetV2 model.
+3. The classification results, including the predicted label and confidence level, will be displayed on the screen.
 
 
 ## License
