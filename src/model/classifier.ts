@@ -67,7 +67,12 @@ export async function loadModel() {
             await tf.ready();
             console.log('TensorFlow.js backend:', tf.getBackend());
             console.log('Loading MobileNetV2 flower model...');
-            model = await tf.loadLayersModel('/flower_model_tfjs/model.json');
+
+            const modelPath = process.env.NODE_ENV === 'production'
+                ? '/flowers-and-plants-classification/flower_model_tfjs/model.json'
+                : '/flower_model_tfjs/model.json';
+
+            model = await tf.loadLayersModel(modelPath);
             console.log('✅ Model loaded successfully');
         } catch (error) {
             console.error('❌ Error loading model:', error);

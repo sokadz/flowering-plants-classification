@@ -1,12 +1,15 @@
 {
-  "name": "ornamental-plant-classifier",
+  "name": "ornamental-plants-and-flowers-classifier",
   "version": "1.0.0",
   "private": true,
+  "homepage": "https://sokadz.github.io/flowers-and-plants-classification",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
@@ -26,7 +29,8 @@
   },
   "devDependencies": {
     "@types/react": "^17.0.2",
-    "@types/react-dom": "^18.2.7"
+    "@types/react-dom": "^18.2.7",
+    "gh-pages": "^6.3.0"
   },
   "eslintConfig": {
     "extends": [
