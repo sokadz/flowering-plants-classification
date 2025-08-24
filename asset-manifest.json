@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/flowers-and-plants-classification/static/css/main.b25466d8.css",
+    "main.js": "/flowers-and-plants-classification/static/js/main.20391dad.js",
+    "index.html": "/flowers-and-plants-classification/index.html",
+    "main.b25466d8.css.map": "/flowers-and-plants-classification/static/css/main.b25466d8.css.map",
+    "main.20391dad.js.map": "/flowers-and-plants-classification/static/js/main.20391dad.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b25466d8.css",
+    "static/js/main.20391dad.js"
+  ]
+}

@@ -1,0 +1,17 @@
+# existing ignores...
+node_modules
+dist
+.env
+# ...existing code...
+
+package-lock.json
+
+# Build output
+build/
+
+# TensorFlow.js model files 
+/public/flower_model_tfjs/
+*.h5
+*.pb
+*.tflite
+*.onnx
