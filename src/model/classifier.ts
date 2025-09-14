@@ -69,8 +69,8 @@ export async function loadModel() {
             console.log('Loading MobileNetV2 flower model...');
 
             const modelPath = process.env.NODE_ENV === 'production'
-                ? '/flowers-and-plants-classification/flower_model_tfjs/model.json'
-                : './flower_model_tfjs/model.json';
+                ? '/flowering-plants-classification/flower_model_tfjs/model.json'
+                : '/flowering-plants-classification/flower_model_tfjs/model.json';
 
             console.log('NODE_ENV:', process.env.NODE_ENV);
             console.log('Model path:', modelPath);
