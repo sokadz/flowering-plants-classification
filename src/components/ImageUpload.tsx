@@ -1,128 +1,198 @@
-import React, { useRef, useState } from 'react';
-import { Button, Text, Paper, Group, rem, Stack } from '@mantine/core';
-import { IconPhoto } from '@tabler/icons-react';
+import React, { useState, useRef } from 'react';
+import { Button, Text, Group, Stack, Image, ActionIcon, Box } from '@mantine/core';
+import { IconUpload, IconX, IconPhoto } from '@tabler/icons-react';
 
 interface ImageUploadProps {
   onImageUpload: (file: File) => void;
+  onImageRemove?: () => void; 
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload, onImageRemove }) => {
+  const [preview, setPreview] = useState<string | null>(null);
+  const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isDragOver, setIsDragOver] = useState(false);
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const supportedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+  const handleFiles = (files: FileList | null) => {
+    if (files && files[0]) {
+      const file = files[0];
       
-      if (supportedTypes.includes(file.type)) {
-        onImageUpload(file);
-      } else {
-        alert(`Format ${file.type || 'HEIC'} tidak didukung. Silakan gunakan JPEG, PNG, atau WebP.`);
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file');
+        return;
       }
+      
+      // Validate file size (max 10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        alert('File size must be less than 10MB');
+        return;
+      }
+      
+      // Create preview
+      const previewUrl = URL.createObjectURL(file);
+      setPreview(previewUrl);
+      
+      // Call parent handler
+      onImageUpload(file);
     }
   };
 
-  const handleClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragEnter = (e: React.DragEvent) => {
     e.preventDefault();
-    setIsDragOver(true);
+    e.stopPropagation();
+    setDragActive(true);
   };
 
   const handleDragLeave = (e: React.DragEvent) => {
     e.preventDefault();
-    setIsDragOver(false);
+    e.stopPropagation();
+    setDragActive(false);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
   };
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    setIsDragOver(false);
+    e.stopPropagation();
+    setDragActive(false);
     
     const files = e.dataTransfer.files;
-    if (files && files[0]) {
-      const file = files[0];
-      const supportedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
-      
-      if (supportedTypes.includes(file.type)) {
-        onImageUpload(file);
-      } else {
-        alert(`Format ${file.type || 'HEIC'} tidak didukung. Silakan gunakan JPEG, PNG, atau WebP.`);
-      }
+    handleFiles(files);
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleFiles(e.target.files);
+  };
+
+  const handleButtonClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleRemoveImage = () => {
+    setPreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+
+    // Call parent callback to clear all state
+    if (onImageRemove) {
+      onImageRemove();
     }
   };
 
   return (
-    <Stack align="center" gap="sm">
-      {/* Dropzone */}
-      <Paper 
-        p="xs"
-        radius="md" 
-        style={{ 
-          border: isDragOver ? '2px dashed #40c057' : '2px dashed #e9ecef',
-          backgroundColor: isDragOver ? '#f8f9fa' : 'transparent',
-          cursor: 'pointer',
-          transition: 'all 0.2s',
-          width: '100%',
-          maxWidth: '300px',
-        }}
-        onClick={handleClick}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-      >
-        <Stack align="center" gap="xs">
-          <IconPhoto 
-            size={rem(20)}
-            color="#858e96" 
-            stroke={1.5}
-          />
-          <div style={{ textAlign: 'center' }}>
-            <Text size="sm" fw={500}>
-              Choose an image to classify
-            </Text>
-            <Text size="xs" c="dimmed">
-              Drag & drop or click to browse
-            </Text>
-          </div>
-        </Stack>
-      </Paper>
-
-      {/* Upload Button */}
-      <Group gap="md">
-        <Button 
-          variant="filled"
-          color="black"
-          size="xs"  
-          radius="md"
-          onClick={handleClick}
-          style={{
-            background: 'linear-gradient(45deg, #000000ff, #000000ff)',
-            border: 'none',
-          }}
-        >
-          Upload Image
-        </Button>
-      </Group>
-
-      {/* File Format Info */}
-      <Text size="xs" c="dimmed" ta="center">
-        Supported: JPEG, PNG, WebP, GIF • Max size: 10MB
-      </Text>
-      <Text size="xs" c="red" ta="center">
-        ⚠️ HEIC files not supported
-      </Text>
-      
+    <Box>
+      {/* Hidden file input */}
       <input
         ref={fileInputRef}
         type="file"
-        accept=".jpg,.jpeg,.png,.webp,.gif"
+        accept="image/*"
         onChange={handleFileSelect}
         style={{ display: 'none' }}
       />
-    </Stack>
+
+      {!preview ? (
+        // Upload area 
+        <Box
+          onDragEnter={handleDragEnter}
+          onDragLeave={handleDragLeave}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+          style={{
+            border: `2px dashed ${dragActive ? '#40c057' : '#ced4da'}`,
+            borderRadius: '8px',
+            padding: '40px 20px',
+            textAlign: 'center',
+            backgroundColor: dragActive ? '#f8f9fa' : 'transparent',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease'
+          }}
+          onClick={handleButtonClick}
+        >
+          <Stack gap="md" align="center">
+            <IconPhoto size={48} color="#868e96" />
+            <div>
+              <Text size="lg" fw={500} c="dark">
+                Choose an image to classify
+              </Text>
+              <Text size="sm" c="dimmed">
+                Drag & drop or click to browse
+              </Text>
+            </div>
+            <Button 
+              leftSection={<IconUpload size={16} />}
+              size="sm"
+              variant="light"
+            >
+              Upload Image
+            </Button>
+            <Text size="xs" c="dimmed">
+              Supported: JPG, PNG, WebP, GIF • Max size: 10MB
+            </Text>
+          </Stack>
+        </Box>
+      ) : (
+        // Preview area with controls
+        <Box>
+          <Stack gap="md">
+            {/* Image preview */}
+            <Box style={{ position: 'relative', display: 'inline-block' }}>
+              <Image
+                src={preview}
+                alt="Preview"
+                w="100%"
+                h={300}
+                fit="cover"
+                radius="md"
+                style={{ maxWidth: '500px', margin: '0 auto' }}
+              />
+              
+              {/* Remove button overlay */}
+              <ActionIcon
+                color="red"
+                size="lg"
+                radius="xl"
+                variant="filled"
+                style={{
+                  position: 'absolute',
+                  top: '10px',
+                  right: '10px',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+                }}
+                onClick={handleRemoveImage}
+              >
+                <IconX size={18} />
+              </ActionIcon>
+            </Box>
+
+            {/* Action buttons */}
+            <Group justify="center" gap="sm">
+              <Button
+                leftSection={<IconUpload size={16} />}
+                variant="light"
+                size="sm"
+                onClick={handleButtonClick}
+              >
+                Upload Different Image
+              </Button>
+              
+              <Button
+                leftSection={<IconX size={16} />}
+                variant="subtle"
+                color="red"
+                size="sm"
+                onClick={handleRemoveImage}
+              >
+                Remove Image
+              </Button>
+            </Group>
+          </Stack>
+        </Box>
+      )}
+    </Box>
   );
 };
 

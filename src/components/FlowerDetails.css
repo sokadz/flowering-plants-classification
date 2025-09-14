@@ -1,0 +1,315 @@
+.plant-details {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.plant-details.loading {
+    text-align: center;
+    padding: 40px;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #4CAF50;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.plant-details.error {
+    text-align: center;
+    padding: 40px;
+    color: #d32f2f;
+}
+
+.classification-result {
+    background: linear-gradient(135deg, #e8f5e8 0%, #d4edda 100%);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid #28a745;
+}
+
+.classification-result h3 {
+    margin: 0 0 15px 0;
+    color: #155724;
+    font-size: 1.5em;
+}
+
+.result-info h4 {
+    margin: 0 0 5px 0;
+    font-size: 1.8em;
+    color: #155724;
+}
+
+.scientific-name {
+    color: #666;
+    font-size: 1.1em;
+    margin: 5px 0;
+}
+
+.confidence {
+    color: #155724;
+    font-size: 1.1em;
+    margin: 10px 0 0 0;
+}
+
+.data-source {
+    background: rgba(255, 193, 7, 0.2);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    color: #856404;
+    margin-top: 10px;
+}
+
+.plant-image {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.plant-image img {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Description */
+.plant-description {
+    margin-bottom: 20px;
+}
+
+.plant-description h4 {
+    color: #2d5a2d;
+    margin-bottom: 12px;
+    font-size: 1.2em;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 5px;
+}
+
+.plant-description p {
+    line-height: 1.6;
+    color: #333;
+    text-align: justify;
+}
+
+/* Scientific Classification */
+.scientific-classification {
+    margin-bottom: 20px;
+}
+
+.scientific-classification h4 {
+    color: #2d5a2d;
+    margin-bottom: 12px;
+    font-size: 1.2em;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 5px;
+}
+
+.classification-table {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.classification-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+.classification-row:last-child {
+    border-bottom: none;
+}
+
+.classification-label {
+    font-weight: 600;
+    color: #495057;
+    min-width: 100px;
+    flex-shrink: 0;
+}
+
+.classification-value {
+    color: #0066cc;
+    font-weight: 500;
+    flex-grow: 1;
+    margin-left: 20px;
+}
+
+.classification-value em {
+    font-style: italic;
+    color: #6f42c1;
+}
+
+.classification-table-grid {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 6px 20px;
+}
+
+.classification-row-grid {
+    display: contents;
+}
+
+/* Plant specs */
+.plant-specs {
+    margin-bottom: 20px;
+}
+
+.plant-specs h4 {
+    color: #2d5a2d;
+    margin-bottom: 12px;
+    font-size: 1.2em;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 5px;
+}
+
+.specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.spec-item {
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.spec-label {
+    font-weight: 600;
+    color: #495057;
+}
+
+.spec-value {
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: #e9ecef;
+}
+
+.difficulty-easy {
+    background: #d4edda !important;
+    color: #155724;
+}
+
+.difficulty-medium {
+    background: #fff3cd !important;
+    color: #856404;
+}
+
+.difficulty-hard {
+    background: #f8d7da !important;
+    color: #721c24;
+}
+
+/* Characteristics */
+.characteristics {
+    margin-bottom: 20px;
+}
+
+.characteristics h4 {
+    color: #2d5a2d;
+    margin-bottom: 12px;
+    font-size: 1.2em;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 5px;
+}
+
+.characteristics ul {
+    list-style: none;
+    padding: 0;
+}
+
+.characteristics li {
+    background: #f8f9fa;
+    margin: 8px 0;
+    padding: 10px 15px;
+    border-radius: 6px;
+    border-left: 3px solid #28a745;
+    position: relative;
+}
+
+.characteristics li:before {
+    content: "✓";
+    color: #28a745;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+/* Wikipedia link */
+.wiki-link {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+}
+
+.wiki-button {
+    display: inline-block;
+    background: #0066cc;
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.wiki-button:hover {
+    background: #0052a3;
+    color: white;
+    text-decoration: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .plant-details {
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .specs-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .result-info h4 {
+        font-size: 1.5em;
+    }
+
+    .classification-row {
+        padding: 4px 0;
+    }
+
+    .classification-label {
+        min-width: 80px;
+    }
+
+    .classification-value {
+        margin-left: 15px;
+    }
+}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react';
 import { 
   MantineProvider, 
@@ -5,11 +6,7 @@ import {
   Title, 
   Text, 
   Loader, 
-  Image, 
-  Progress, 
   Card, 
-  Group, 
-  Badge, 
   Stack,
   Center,
   createTheme,
@@ -19,6 +16,7 @@ import '@mantine/core/styles.css';
 import ImageUpload from './components/ImageUpload';
 import { classifyImage } from './model/classifier';
 import { flowerLabels } from './model/labels';
+import { PlantDetails } from './components/FlowerDetails';
 
 const theme = createTheme({
   primaryColor: 'green',
@@ -27,23 +25,17 @@ const theme = createTheme({
 
 function App() {
   const [result, setResult] = useState<string | null>(null);
-  const [description, setDescription] = useState<string | null>(null);
   const [confidence, setConfidence] = useState<number | null>(null);
-  const [topPredictions, setTopPredictions] = useState<Array<{ 
-    label: number; 
-    confidence: number; 
-    name: string 
-  }> | null>(null);
+  const [classId, setClassId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
-  const [preview, setPreview] = useState<string | null>(null);
+  const [hasImage, setHasImage] = useState(false); 
 
   const handleImageUpload = async (file: File) => {
-    setResult(null);
-    setDescription(null);
+    // Reset all state
     setConfidence(null);
-    setTopPredictions(null);
-    setPreview(URL.createObjectURL(file));
+    setClassId(null);
     setLoading(true);
+    setHasImage(true); 
     
     try {
       const res = await classifyImage(file);
@@ -51,30 +43,23 @@ function App() {
       
       setResult(flowerName);
       setConfidence(res.confidence);
-      setDescription(`Predicted flower class: ${res.label + 1}/102`);
-      
-      if (res.topPredictions) {
-        const topWithNames = res.topPredictions.map(pred => ({
-          ...pred,
-          name: flowerLabels[pred.label] || `Class ${pred.label + 1}`
-        }));
-        setTopPredictions(topWithNames);
-      }
+      setClassId(res.label);
       
     } catch (e) {
       console.error(e);
-      setResult('Error');
-      setDescription('Failed to classify image.');
       setConfidence(null);
+      setClassId(null);
     }
     setLoading(false);
   };
 
-  const getConfidenceColor = (conf: number): string => {
-    if (conf >= 0.8) return 'green';
-    if (conf >= 0.6) return 'yellow';
-    if (conf >= 0.4) return 'orange';
-    return 'red';
+
+  // Handler when image is removed
+  const handleImageRemove = () => {
+    setConfidence(null);
+    setClassId(null);
+    setLoading(false);
+    setHasImage(false);
   };
 
   return (
@@ -93,7 +78,7 @@ function App() {
                 fontWeight: 700,
               }}
             >
-              🌱 Ornamental Plants & Flowers Classifier 🌸
+              🌸 Flowering Plants Classifier 🌺
             </Title>
             <Text ta="center" c="dimmed" size="lg">
               Upload an image to identify the flower species using MobileNetV2
@@ -102,22 +87,11 @@ function App() {
 
           {/* Image Upload */}
           <Card shadow="sm" padding="lg" radius="md" withBorder>
-            <ImageUpload onImageUpload={handleImageUpload} />
+            <ImageUpload 
+              onImageUpload={handleImageUpload}
+              onImageRemove={handleImageRemove} 
+            />
           </Card>
-          
-          {/* Preview Image */}
-          {preview && (
-            <Center>
-              <Image 
-                src={preview} 
-                alt="Preview" 
-                w={400}
-                h={300}
-                fit="cover"
-                radius="lg"
-              />
-            </Center>
-          )}
           
           {/* Loading */}
           {loading && (
@@ -128,104 +102,13 @@ function App() {
               </Stack>
             </Center>
           )}
-          
-          {/* Results */}
-          {result && confidence !== null && (
-            <Card shadow="lg" padding="xl" radius="lg" withBorder>
-              <Stack gap="lg">
-                {/* Header */}
-                <Group justify="space-between" align="center">
-                  <Title order={2} c="dark">
-                    🎯 Classification Result
-                  </Title>
-                  <Badge 
-                    color={getConfidenceColor(confidence)} 
-                    size="xl"
-                    radius="xl"
-                    variant="filled"
-                  >
-                    {(confidence * 100).toFixed(1)}%
-                  </Badge>
-                </Group>
-                
-                {/* Main Result */}
-                <Card bg="gray.0" radius="md" p="md">
-                  <Group justify="space-between" align="center">
-                    <div>
-                      <Text size="xl" fw={700} c="dark">
-                        {result}
-                      </Text>
-                      <Text size="sm" c="dimmed">
-                        {description}
-                      </Text>
-                    </div>
-                  </Group>
-                </Card>
-                
-                {/* Confidence Bar */}
-                <div>
-                  <Group justify="space-between" mb="xs">
-                    <Text size="sm" fw={500}>Confidence Level</Text>
-                    <Text size="sm" c="dimmed">
-                      {confidence >= 0.8 ? 'Very Confident' : 
-                       confidence >= 0.6 ? 'Confident' :
-                       confidence >= 0.4 ? 'Moderate' : 'Low Confidence'}
-                    </Text>
-                  </Group>
-                  <Progress 
-                    value={confidence * 100} 
-                    color={getConfidenceColor(confidence)}
-                    size="xl" 
-                    radius="xl"
-                    animated
-                  />
-                </div>
-                
-                {/* Top Predictions */}
-                {topPredictions && topPredictions.length > 1 && (
-                  <div>
-                    <Title order={4} mb="md">
-                      🏆 Top Predictions
-                    </Title>
-                    <Stack gap="sm">
-                      {topPredictions.map((pred, index) => (
-                        <Card 
-                          key={index} 
-                          bg={index === 0 ? 'green.0' : 'gray.0'} 
-                          radius="md" 
-                          p="sm"
-                        >
-                          <Group justify="space-between" align="center">
-                            <Group gap="sm">
-                              <Badge 
-                                color={index === 0 ? 'green' : 'gray'}
-                                radius="xl"
-                                size="lg"
-                              >
-                                #{index + 1}
-                              </Badge>
-                              <Text 
-                                fw={index === 0 ? 600 : 400}
-                                c={index === 0 ? 'green' : 'dark'}
-                              >
-                                {pred.name}
-                              </Text>
-                            </Group>
-                            <Badge 
-                              color={getConfidenceColor(pred.confidence)}
-                              variant={index === 0 ? 'filled' : 'outline'}
-                              radius="xl"
-                            >
-                              {(pred.confidence * 100).toFixed(1)}%
-                            </Badge>
-                          </Group>
-                        </Card>
-                      ))}
-                    </Stack>
-                  </div>
-                )}
-              </Stack>
-            </Card>
+
+          {/* Plant Details */}
+          {hasImage && classId !== null && confidence !== null && (
+            <PlantDetails 
+              classId={classId} 
+              confidence={confidence} 
+            />
           )}
         </Stack>
       </Container>

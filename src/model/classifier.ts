@@ -70,7 +70,11 @@ export async function loadModel() {
 
             const modelPath = process.env.NODE_ENV === 'production'
                 ? '/flowers-and-plants-classification/flower_model_tfjs/model.json'
-                : '/flower_model_tfjs/model.json';
+                : './flower_model_tfjs/model.json';
+
+            console.log('NODE_ENV:', process.env.NODE_ENV);
+            console.log('Model path:', modelPath);
+            console.log('Current URL:', window.location.href);
 
             model = await tf.loadLayersModel(modelPath);
             console.log('✅ Model loaded successfully');
