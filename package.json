@@ -1,8 +1,8 @@
 {
-  "name": "ornamental-plants-and-flowers-classifier",
+  "name": "flowering-plants-classification",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://sokadz.github.io/flowers-and-plants-classification",
+  "homepage": "https://sokadz.github.io/flowering-plants-classification",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
