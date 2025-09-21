@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/flowering-plants-classification/static/css/main.509fe8a0.css",
-    "main.js": "/flowering-plants-classification/static/js/main.095d3eba.js",
+    "main.js": "/flowering-plants-classification/static/js/main.33a31751.js",
     "index.html": "/flowering-plants-classification/index.html",
     "main.509fe8a0.css.map": "/flowering-plants-classification/static/css/main.509fe8a0.css.map",
-    "main.095d3eba.js.map": "/flowering-plants-classification/static/js/main.095d3eba.js.map"
+    "main.33a31751.js.map": "/flowering-plants-classification/static/js/main.33a31751.js.map"
   },
   "entrypoints": [
     "static/css/main.509fe8a0.css",
-    "static/js/main.095d3eba.js"
+    "static/js/main.33a31751.js"
   ]
 }
