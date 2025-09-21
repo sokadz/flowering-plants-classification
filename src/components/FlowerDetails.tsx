@@ -36,7 +36,7 @@ export const PlantDetails: React.FC<PlantDetailsProps> = ({ classId, confidence 
         return (
             <div className="plant-details loading">
                 <div className="loading-spinner"></div>
-                <p>Loading plant information...</p>
+                <p>Loading flower information...</p>
             </div>
         );
     }
@@ -56,7 +56,14 @@ export const PlantDetails: React.FC<PlantDetailsProps> = ({ classId, confidence 
                 <h3>🌸 Classification Result</h3>
                 <div className="result-info">
                     <h4>{plantInfo.name}</h4>
-                    <p className="scientific-name"><em>{plantInfo.scientificName}</em></p>
+                    <p className="scientific-name">
+                        <em>
+                            {plantInfo.genus && plantInfo.species 
+                                ? `${plantInfo.genus} ${plantInfo.species}`
+                                : plantInfo.scientificName || 'Scientific name not available'
+                            }
+                        </em>
+                    </p>
                     <p className="confidence">
                         <strong>Confidence: {(confidence * 100).toFixed(1)}%</strong>
                     </p>
@@ -131,7 +138,14 @@ export const PlantDetails: React.FC<PlantDetailsProps> = ({ classId, confidence 
                     
                     <div className="classification-row">
                         <span className="classification-label">Species:</span>
-                        <span className="classification-value"><em>{plantInfo.species}</em></span>
+                        <span className="classification-value">
+                            <em>
+                                {plantInfo.genus && plantInfo.species 
+                                    ? `${plantInfo.genus} ${plantInfo.species}`
+                                    : plantInfo.species || 'Species not specified'
+                                }
+                            </em>
+                        </span>
                     </div>
                 </div>
             </div>

@@ -38,13 +38,13 @@ To get a local copy up and running, follow these steps:
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/ornamental-plant-classifier.git
+   git clone https://github.com/sokadz/flowering-plants-classification.git
    ```
 
 2. **Navigate to the project directory:**
 
    ```bash
-   cd ornamental-plant-classifier
+   cd flowering-plants-classification
    ```
 
 3. **Install dependencies:**
@@ -69,7 +69,7 @@ To get a local copy up and running, follow these steps:
 
 1. Upload an image of a flower using the upload button.
 2. The application will process the image and classify it using the MobileNetV2 model.
-3. The classification results, including the predicted label and confidence level, will be displayed on the screen.
+3. The classification results, including description and confidence level, will be displayed on the screen.
 
 
 ## License
